@@ -1,0 +1,219 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+:root {
+  --radius: 0.25rem;
+  /* Aged paper */
+  --background: oklch(0.936 0.028 92);
+  --foreground: oklch(0.21 0.02 60);
+  --card: oklch(0.955 0.025 95);
+  --card-foreground: oklch(0.21 0.02 60);
+  --popover: oklch(0.955 0.025 95);
+  --popover-foreground: oklch(0.21 0.02 60);
+  /* Propaganda red */
+  --primary: oklch(0.512 0.212 27.5);
+  --primary-foreground: oklch(0.95 0.02 95);
+  --secondary: oklch(0.24 0.02 60);
+  --secondary-foreground: oklch(0.936 0.028 92);
+  --muted: oklch(0.905 0.026 92);
+  --muted-foreground: oklch(0.42 0.02 60);
+  --accent: oklch(0.24 0.02 60);
+  --accent-foreground: oklch(0.936 0.028 92);
+  --destructive: oklch(0.512 0.212 27.5);
+  --destructive-foreground: oklch(0.95 0.02 95);
+  --border: oklch(0.24 0.02 60 / 25%);
+  --input: oklch(0.24 0.02 60 / 25%);
+  --ring: oklch(0.512 0.212 27.5);
+  --chart-1: oklch(0.512 0.212 27.5);
+  --chart-2: oklch(0.24 0.02 60);
+  --chart-3: oklch(0.55 0.03 70);
+  --chart-4: oklch(0.7 0.05 80);
+  --chart-5: oklch(0.4 0.1 30);
+}
+
+@theme {
+  --font-display: "Archivo Black", "Arial Black", sans-serif;
+  --font-body: "Barlow", "Helvetica Neue", sans-serif;
+  --font-condensed: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+}
+
+/* ---- Campaign texture & motion utilities ---- */
+
+@utility halftone {
+  background-image: radial-gradient(
+    circle at center,
+    oklch(0.24 0.02 60 / 14%) 1px,
+    transparent 1.2px
+  );
+  background-size: 8px 8px;
+}
+
+@utility halftone-red {
+  background-image: radial-gradient(
+    circle at center,
+    oklch(0.95 0.02 95 / 16%) 1.2px,
+    transparent 1.4px
+  );
+  background-size: 9px 9px;
+}
+
+@utility paper-grain {
+  background-image: repeating-linear-gradient(
+      0deg,
+      transparent 0 3px,
+      oklch(0.24 0.02 60 / 2.5%) 3px 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 3px,
+      oklch(0.24 0.02 60 / 2%) 3px 4px
+    );
+}
+
+@utility headline {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+}
+
+@utility kicker {
+  font-family: var(--font-condensed);
+  text-transform: uppercase;
+  letter-spacing: 0.35em;
+  font-weight: 600;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes stamp-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.6) rotate(-8deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.95) rotate(-3deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-3deg);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flicker-star {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@utility animate-marquee {
+  animation: marquee-x 28s linear infinite;
+}
+
+@utility animate-stamp {
+  animation: stamp-in 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+@utility animate-rise {
+  animation: rise-in 0.7s ease-out both;
+}
+
+@utility animate-star {
+  animation: flicker-star 1.8s ease-in-out infinite;
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease-out,
+    transform 0.7s ease-out;
+}
+
+@utility reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
