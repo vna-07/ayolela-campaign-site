@@ -3,9 +3,6 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Update this list with your own tracks + artist credits.
  * Files should live in /public/music/ and be referenced with a leading slash.
- *
- * NOTE: If these files fail to load in production, consider renaming them
- * to simple names like "21-savage-a-lot.mp3" to avoid URL encoding issues.
  */
 const TRACKS = [
   {
@@ -55,11 +52,12 @@ const TRACKS = [
   },
 ];
 
+// FIX 1: Add explicit return type and proper generic handling
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
+    [a[i], a[j]] = [a[j]!, a[i]!];
   }
   return a;
 }
@@ -73,6 +71,7 @@ function formatTime(seconds: number): string {
 
 export function MusicPlayer() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  // FIX 2: Add type assertion to tell TypeScript this is an array of the correct type
   const [playlist] = useState(() => shuffle(TRACKS));
   const [trackIndex, setTrackIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -80,7 +79,13 @@ export function MusicPlayer() {
   const [duration, setDuration] = useState(0);
   const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const current = playlist[trackIndex];
+  // FIX 3: Add a fallback in case playlist is empty
+  const current = playlist.length > 0 ? playlist[trackIndex] : null;
+
+  // FIX 4: Guard against null/undefined current
+  if (!current) {
+    return null; // Or a loading/empty state
+  }
 
   // Attempt to start playback; if the browser blocks it, wait for the
   // first user interaction anywhere on the page and retry then.
@@ -128,7 +133,7 @@ export function MusicPlayer() {
     setTrackIndex((i) => (i + 1) % playlist.length);
   };
 
-  // 🆕 FIX: If a track fails to load (404, CORS, etc.), skip to the next one
+  // If a track fails to load (404, CORS, etc.), skip to the next one
   const handleAudioError = () => {
     console.warn(`Failed to load track: ${current.title}. Skipping to next.`);
     setIsPlaying(false);
@@ -137,16 +142,16 @@ export function MusicPlayer() {
 
   const togglePill = () => setExpanded((e) => !e);
 
-  if (playlist.length === 0) return null;
-
   return (
     <div className="fixed left-4 top-4 z-50">
       <audio
+        key={current.src}
         ref={audioRef}
         src={current.src}
+        preload="metadata"
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
-        onError={handleAudioError} // 🆕 Added error handler
+        onError={handleAudioError}
       />
       <button
         onClick={togglePill}
