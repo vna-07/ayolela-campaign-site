@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import posterAsset from "@/assets/ayo-poster.png.asset.json";
+import posterAsset from "@/assets/ayo-poster.png";
 
-const POSTER_URL = (posterAsset as { url: string }).url;
+const POSTER_URL = posterAsset;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -145,7 +145,7 @@ const CALIBERS = [
   {
     tag: "Academics",
     title: "Triple-Major Scholar",
-    body: "Penultimate-year BSc — Computer Science, Statistics & Information Systems. GPA 3.8/4.0 with six distinctions including Accounting, Economics and Mathematics at 80%.",
+    body: "Penultimate-year BSc — Computer Science, Statistics & Information Systems, with multiple distinctions across his coursework.",
   },
   {
     tag: "Competition",
@@ -185,7 +185,7 @@ const QA = [
   },
   {
     q: "Can he handle both Secretary AND Treasurer?",
-    a: "The combination means total administrative and financial oversight — exactly his skill set. Certified Document Control for the minutes and records; an 80% Accounting distinction and Rifle Club treasury experience for the money. Both sides of the role are already proven in practice.",
+    a: "The combination means total administrative and financial oversight — exactly his skill set. Certified Document Control for the minutes and records; strong Accounting background and Rifle Club treasury experience for the money. Both sides of the role are already proven in practice.",
   },
   {
     q: "How will the money be handled?",
@@ -274,8 +274,8 @@ function CampaignPage() {
             </Reveal>
             <Reveal delay={200}>
               <p className="mt-6 max-w-md text-lg font-medium leading-relaxed">
-                <span className="font-bold">Ayolela Vena.</span> Not the loudest in
-                the room — the most reliable. Earning your trust through action.
+                <span className="font-bold">Ayolela Vena.</span> Brotherhood built
+                on trust. Leadership built on action.
               </p>
             </Reveal>
             <Reveal delay={300}>
