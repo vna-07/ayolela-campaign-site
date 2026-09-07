@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import posterAsset from "../assets/ayo-poster.png";
+import posterAsset from "../assets/ayo-poster.webp";
 import { MusicPlayer } from "@/components/MusicPlayer";
 
 const POSTER_URL = posterAsset;
