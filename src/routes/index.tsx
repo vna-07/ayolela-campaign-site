@@ -2,6 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import posterAsset from "../assets/ayo-poster.png";
 import { MusicPlayer } from "@/components/MusicPlayer";
+import { Analytics } from "@vercel/analytics/react";
+// inside your JSX, anywhere:
+
 
 const POSTER_URL = posterAsset;
 
@@ -406,6 +409,7 @@ function CampaignPage() {
 
   return (
     <div className="paper-grain min-h-screen bg-background text-foreground">
+      <Analytics />
       <MusicPlayer />
 
       <header className="flex items-center justify-between border-b-2 border-foreground px-4 py-3 sm:px-8">
