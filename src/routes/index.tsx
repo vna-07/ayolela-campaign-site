@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import posterAsset from "../assets/ayo-poster.webp";
+import posterAsset from "../assets/ayo-poster.png";
 import { MusicPlayer } from "@/components/MusicPlayer";
 
 const POSTER_URL = posterAsset;
@@ -353,6 +353,15 @@ function Marquee() {
 function CampaignPage() {
   const [openQ, setOpenQ] = useState<number | null>(0);
   const [imgLoaded, setImgLoaded] = useState(false);
+  const posterImgRef = useRef<HTMLImageElement>(null);
+
+  // Catch the case where the image is already loaded (from SSR/cache)
+  // before React attaches the onLoad handler.
+  useEffect(() => {
+    if (posterImgRef.current?.complete) {
+      setImgLoaded(true);
+    }
+  }, []);
 
   // Smooth scroll for anchor links
   useEffect(() => {
@@ -478,6 +487,7 @@ function CampaignPage() {
               </div>
             )}
             <img
+              ref={posterImgRef}
               src={POSTER_URL}
               alt="Official campaign poster — Ayolela Vena for House Secretary and Treasurer, Chris Hani Residence"
               className={`w-full border-2 border-foreground object-cover shadow-[10px_10px_0_0_var(--color-foreground)] ${
