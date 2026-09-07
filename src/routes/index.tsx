@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import posterAsset from "@/assets/ayo-poster.png";
+// ✅ FIX 1: Use relative path instead of alias
+import posterAsset from "../assets/ayo-poster.png";
 import { MusicPlayer } from "@/components/MusicPlayer";
+
+// Or ✅ FIX 2: Use public folder
+// const POSTER_URL = "/ayo-poster.png";
 
 const POSTER_URL = posterAsset;
 
@@ -22,7 +26,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:image",
-        content: "https://your-site.com/og-image.png",
+        content: "https://your-site.com/ayo-poster.png",
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://your-site.com" },
@@ -35,7 +39,7 @@ export const Route = createFileRoute("/")({
       },
       {
         name: "twitter:image",
-        content: "https://your-site.com/og-image.png",
+        content: "https://your-site.com/ayo-poster.png",
       },
     ],
   }),
@@ -348,10 +352,7 @@ function CampaignPage() {
       }
     };
 
-    // Handle initial hash on load
     handleHashChange();
-
-    // Listen for hash changes
     window.addEventListener("hashchange", handleHashChange);
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
@@ -371,7 +372,6 @@ function CampaignPage() {
         // User cancelled or share failed
       }
     } else {
-      // Fallback: copy to clipboard
       await navigator.clipboard?.writeText(
         `${shareData.text}\n\n${shareData.url}`,
       );
@@ -383,7 +383,6 @@ function CampaignPage() {
     <div className="paper-grain min-h-screen bg-background text-foreground">
       <MusicPlayer />
 
-      {/* Top bar */}
       <header className="flex items-center justify-between border-b-2 border-foreground px-4 py-3 sm:px-8">
         <span className="kicker text-xs">Chris Hani Residence — Rhodes University</span>
         <div className="flex items-center gap-4">
@@ -455,8 +454,13 @@ function CampaignPage() {
             <div className="animate-stamp absolute -left-3 -top-3 z-10 border-4 border-primary bg-background px-4 py-2">
               <span className="headline text-2xl text-primary">Vote</span>
             </div>
+            {/* ✅ FIX: Improved image loading with fallback */}
             {!imgLoaded && (
-              <div className="h-[400px] w-full animate-pulse bg-muted border-2 border-foreground" />
+              <div className="flex h-[400px] w-full items-center justify-center border-2 border-foreground bg-muted">
+                <span className="kicker text-sm text-muted-foreground">
+                  Loading poster...
+                </span>
+              </div>
             )}
             <img
               src={POSTER_URL}
@@ -466,6 +470,10 @@ function CampaignPage() {
               }`}
               loading="eager"
               onLoad={() => setImgLoaded(true)}
+              onError={() => {
+                console.error("Failed to load poster image");
+                setImgLoaded(true); // Show placeholder instead of broken image
+              }}
             />
           </Reveal>
         </div>
@@ -701,7 +709,7 @@ function CampaignPage() {
           Service. Accountability. Integrity. — 2027 Campaign
         </p>
         <p className="text-[0.55rem] text-muted-foreground/60">
-          Made with ❤️ for Chris Hani Residence
+          Made to Supersede Chris Hani Residence
         </p>
       </footer>
     </div>
