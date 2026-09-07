@@ -20,8 +20,23 @@ export const Route = createFileRoute("/")({
         content:
           "Service. Accountability. Integrity. Earning your trust through action — Chris Hani Residence, Rhodes University.",
       },
+      {
+        property: "og:image",
+        content: "https://your-site.com/og-image.png",
+      },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://your-site.com" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Vote Ayo — Ayolela Vena" },
+      {
+        name: "twitter:description",
+        content:
+          "Service. Accountability. Integrity. Earning your trust through action — Chris Hani Residence, Rhodes University.",
+      },
+      {
+        name: "twitter:image",
+        content: "https://your-site.com/og-image.png",
+      },
     ],
   }),
   component: CampaignPage,
@@ -122,6 +137,7 @@ const STATS: Array<{
   { value: 10, suffix: "%", prefix: "Top ", label: "Of Cohort, Rhodes University" },
   { value: 2, suffix: "nd", label: "Nationally — FNB DataQuest 2026" },
   { value: 30, suffix: "%", prefix: "+", label: "Avg. Grade Boost as Maths Tutor" },
+  { value: 100, suffix: "%", label: "Accountability — No Excuses" },
 ];
 
 const PILLARS = [
@@ -142,11 +158,80 @@ const PILLARS = [
   },
 ];
 
+const PROMISES = [
+  {
+    tag: "Financial",
+    subTag: "Technical",
+    title: "Real-Time Financial Dashboard",
+    body: "A live page showing every transaction — income, expenses, and current balance — updated in real-time. No more waiting for a meeting to find out where your money went.",
+  },
+  {
+    tag: "Financial",
+    subTag: "Fairness",
+    title: "Fair, Transparent Tuckshop Pricing",
+    body: "A pricing model that covers costs fairly and no more, with regular resident surveys shaping what actually gets stocked. Full cost breakdown visible to all.",
+  },
+  {
+    tag: "Financial",
+    subTag: "Growth",
+    title: "New Revenue Streams",
+    body: "Tuckshop expansion, event sponsorships, residence merchandise, and bulk buying — so residents carry less of the financial load.",
+  },
+  {
+    tag: "Communication",
+    subTag: "Access",
+    title: "Open Door Policy",
+    body: "In person, WhatsApp, email or an anonymous form — multiple channels so every voice gets heard, not just the loudest. Visible and approachable daily.",
+  },
+  {
+    tag: "Communication",
+    subTag: "Follow-up",
+    title: "Personal Follow-Up System",
+    body: "When you raise something, I follow up personally until it's resolved — not just noted and forgotten after one conversation. Every concern tracked.",
+  },
+  {
+    tag: "Communication",
+    subTag: "Feedback",
+    title: "Engagement & Feedback Platform",
+    body: "A simple place to submit ideas, ask questions and vote on priorities. Every suggestion gets an actual response within 24 hours.",
+  },
+  {
+    tag: "Efficiency",
+    subTag: "Speed",
+    title: "Faster Procurement & Approvals",
+    body: "Digitised, trackable requests so event and purchase approvals don't get stuck in limbo or lost in a group chat. Average approval time: 48 hours.",
+  },
+  {
+    tag: "Efficiency",
+    subTag: "Organisation",
+    title: "Booking & Request System",
+    body: "One place to book shared spaces and request resources, with real-time availability — no more chaotic WhatsApp back-and-forth. Fair access for all.",
+  },
+  {
+    tag: "Efficiency",
+    subTag: "Meetings",
+    title: "Meeting Optimisation",
+    body: "Set agendas sent 48 hours in advance, timeboxed items, and minutes distributed within 24 hours. Every meeting has a clear purpose and outcome.",
+  },
+  {
+    tag: "Culture",
+    subTag: "Brotherhood",
+    title: "A Real Standard of Brotherhood",
+    body: "Weekly check-ins, a buddy system and interest groups — structures for genuine connection, not just a word we say. No one left behind.",
+  },
+  {
+    tag: "Culture",
+    subTag: "First-Years",
+    title: "First-Year Integration Programme",
+    body: "Welcome packs, mentor buddies and ongoing check-ins so first-years feel at home from day one, not thrown in the deep end. Support throughout the year.",
+  },
+];
+
 const CALIBERS = [
   {
     tag: "Academics",
     title: "Triple-Major Scholar",
-    body: "Penultimate-year BSc — Computer Science, Statistics & Information Systems, with multiple distinctions across his coursework.",
+    body: "Penultimate-year BSc — Computer Science, Statistics & Information Systems, with multiple distinctions across his coursework. 80.13% average.",
   },
   {
     tag: "Competition",
@@ -161,7 +246,7 @@ const CALIBERS = [
   {
     tag: "Leadership",
     title: "Treasurer & Vice Chair — RU Rifle Club",
-    body: "Currently managing real budgets, real money and real accountability. Proven systems — not learning on the job.",
+    body: "Currently managing real budgets, real money and real accountability. Proven systems — not learning on the job. Already delivering results.",
   },
   {
     tag: "Certification",
@@ -171,7 +256,7 @@ const CALIBERS = [
   {
     tag: "Community",
     title: "Academic Tutor — Nine Tenths",
-    body: "Mentoring matric students in Mathematics, lifting grades by an average of 30%. Service already practised, not promised.",
+    body: "Mentoring matric students in Mathematics, lifting grades by an average of 30%. Service already practised, not promised. Real impact, real results.",
   },
 ];
 
@@ -215,6 +300,8 @@ const COMMITMENTS = [
   "Exam snacks and events fully budgeted and funded",
   "One hour a week minimum in the common room",
   "Isolated students identified and actively encouraged",
+  "Every suggestion gets a response within 24 hours",
+  "Receipts reconciled within one week",
 ];
 
 /* ---------- Page ---------- */
@@ -245,16 +332,72 @@ function Marquee() {
 
 function CampaignPage() {
   const [openQ, setOpenQ] = useState<number | null>(0);
+  const [imgLoaded, setImgLoaded] = useState(false);
+
+  // Smooth scroll for anchor links
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const el = document.querySelector(hash);
+        if (el) {
+          setTimeout(() => {
+            el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 100);
+        }
+      }
+    };
+
+    // Handle initial hash on load
+    handleHashChange();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", handleHashChange);
+    return () => window.removeEventListener("hashchange", handleHashChange);
+  }, []);
+
+  // Share campaign
+  const handleShare = async () => {
+    const shareData = {
+      title: "Vote Ayo — Ayolela Vena for House Secretary & Treasurer",
+      text: "Service. Accountability. Integrity. Earning your trust through action — Chris Hani Residence, Rhodes University.",
+      url: window.location.href,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch {
+        // User cancelled or share failed
+      }
+    } else {
+      // Fallback: copy to clipboard
+      await navigator.clipboard?.writeText(
+        `${shareData.text}\n\n${shareData.url}`,
+      );
+      alert("Link copied to clipboard! Share it with your fellow residents.");
+    }
+  };
 
   return (
     <div className="paper-grain min-h-screen bg-background text-foreground">
       <MusicPlayer />
+
       {/* Top bar */}
       <header className="flex items-center justify-between border-b-2 border-foreground px-4 py-3 sm:px-8">
         <span className="kicker text-xs">Chris Hani Residence — Rhodes University</span>
-        <span className="kicker hidden text-xs text-primary sm:block">
-          2027 Campaign
-        </span>
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleShare}
+            aria-label="Share campaign"
+            className="kicker hidden text-xs transition-colors hover:text-primary sm:block"
+          >
+            Share Campaign →
+          </button>
+          <span className="kicker hidden text-xs text-primary sm:block">
+            2027 Campaign
+          </span>
+        </div>
       </header>
 
       {/* Hero */}
@@ -274,8 +417,13 @@ function CampaignPage() {
                 </span>
               </h1>
             </Reveal>
+            <Reveal delay={150}>
+              <p className="mt-4 text-sm uppercase tracking-[0.2em] text-primary">
+                "Not the loudest — the most reliable."
+              </p>
+            </Reveal>
             <Reveal delay={200}>
-              <p className="mt-6 max-w-md text-lg font-medium leading-relaxed">
+              <p className="mt-2 max-w-md text-lg font-medium leading-relaxed">
                 <span className="font-bold">Ayolela Vena.</span> Brotherhood built
                 on trust. Leadership built on action.
               </p>
@@ -304,14 +452,20 @@ function CampaignPage() {
             </Reveal>
           </div>
           <Reveal delay={200} className="relative">
-            <div className="animate-stamp absolute -left-3 -top-3 z-10 border-4 border-primary px-4 py-2">
+            <div className="animate-stamp absolute -left-3 -top-3 z-10 border-4 border-primary bg-background px-4 py-2">
               <span className="headline text-2xl text-primary">Vote</span>
             </div>
+            {!imgLoaded && (
+              <div className="h-[400px] w-full animate-pulse bg-muted border-2 border-foreground" />
+            )}
             <img
               src={POSTER_URL}
               alt="Official campaign poster — Ayolela Vena for House Secretary and Treasurer, Chris Hani Residence"
-              className="w-full border-2 border-foreground object-cover shadow-[10px_10px_0_0_var(--color-foreground)]"
+              className={`w-full border-2 border-foreground object-cover shadow-[10px_10px_0_0_var(--color-foreground)] ${
+                !imgLoaded ? "hidden" : "block"
+              }`}
               loading="eager"
+              onLoad={() => setImgLoaded(true)}
             />
           </Reveal>
         </div>
@@ -321,7 +475,7 @@ function CampaignPage() {
 
       {/* Stats */}
       <section className="border-b-2 border-foreground bg-secondary text-secondary-foreground">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x-2 divide-secondary-foreground/20 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x-2 divide-secondary-foreground/20 lg:grid-cols-5">
           {STATS.map((s, i) => (
             <div key={i} className="halftone-red px-6 py-10 text-center">
               <div className="headline text-4xl text-primary-foreground sm:text-5xl">
@@ -339,7 +493,7 @@ function CampaignPage() {
       </section>
 
       {/* Pillars */}
-      <section id="why" className="border-b-2 border-foreground">
+      <section id="why" className="scroll-mt-20 border-b-2 border-foreground">
         <div className="mx-auto max-w-6xl px-4 py-16 sm:px-8">
           <Reveal>
             <p className="kicker text-sm text-primary">The Platform</p>
@@ -356,6 +510,44 @@ function CampaignPage() {
                   </span>
                   <h3 className="headline mt-4 text-3xl">{p.title}</h3>
                   <p className="mt-4 leading-relaxed text-muted-foreground">
+                    {p.body}
+                  </p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Promises */}
+      <section id="promises" className="scroll-mt-20 border-b-2 border-foreground bg-card">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-8">
+          <Reveal>
+            <p className="kicker text-sm text-primary">In Writing</p>
+            <h2 className="headline mt-2 text-5xl sm:text-7xl">
+              The Full <span className="text-primary">Platform.</span>
+            </h2>
+            <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
+              Eleven concrete commitments — not vague slogans. Here's exactly
+              what changes if elected.
+            </p>
+          </Reveal>
+          <div className="mt-12 grid gap-px border-2 border-foreground bg-foreground sm:grid-cols-2 lg:grid-cols-3">
+            {PROMISES.map((p, i) => (
+              <Reveal key={p.title} delay={i * 60}>
+                <article className="h-full bg-card p-6">
+                  <div className="flex items-center gap-2">
+                    <span className="kicker inline-block border border-primary px-2 py-1 text-[0.6rem] text-primary">
+                      {p.tag}
+                    </span>
+                    <span className="kicker inline-block border border-foreground/20 px-2 py-1 text-[0.5rem] text-muted-foreground">
+                      {p.subTag}
+                    </span>
+                  </div>
+                  <h3 className="mt-3 font-condensed text-xl font-bold uppercase leading-tight tracking-wide">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {p.body}
                   </p>
                 </article>
@@ -396,13 +588,16 @@ function CampaignPage() {
       </section>
 
       {/* Q&A */}
-      <section id="qa" className="border-b-2 border-foreground">
+      <section id="qa" className="scroll-mt-20 border-b-2 border-foreground">
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-8">
           <Reveal>
             <p className="kicker text-sm text-primary">Open Floor</p>
             <h2 className="headline mt-2 text-5xl sm:text-7xl">
               Questions.<span className="text-primary"> Answered.</span>
             </h2>
+            <p className="mt-4 max-w-xl leading-relaxed text-muted-foreground">
+              The questions you're thinking. The answers you deserve.
+            </p>
           </Reveal>
           <div className="mt-12 divide-y-2 divide-foreground border-2 border-foreground bg-card">
             {QA.map((item, i) => {
@@ -477,6 +672,20 @@ function CampaignPage() {
               Secretary &amp; Treasurer — Chris Hani Residence. Give him the chance
               to earn your trust through action. He won't let you down.
             </p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="#promises"
+                className="headline border-2 border-foreground bg-foreground px-6 py-3 text-base text-background transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                Read The Full Platform
+              </a>
+              <button
+                onClick={handleShare}
+                className="headline border-2 border-foreground bg-background px-6 py-3 text-base text-foreground transition-colors hover:bg-primary hover:text-primary-foreground"
+              >
+                Share This Page
+              </button>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -490,6 +699,9 @@ function CampaignPage() {
         </p>
         <p className="text-xs text-muted-foreground">
           Service. Accountability. Integrity. — 2027 Campaign
+        </p>
+        <p className="text-[0.55rem] text-muted-foreground/60">
+          Made with ❤️ for Chris Hani Residence
         </p>
       </footer>
     </div>
