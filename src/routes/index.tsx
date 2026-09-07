@@ -1,11 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-// ✅ FIX 1: Use relative path instead of alias
 import posterAsset from "../assets/ayo-poster.png";
 import { MusicPlayer } from "@/components/MusicPlayer";
-
-// Or ✅ FIX 2: Use public folder
-// const POSTER_URL = "/ayo-poster.png";
 
 const POSTER_URL = posterAsset;
 
@@ -137,7 +133,6 @@ const STATS: Array<{
   prefix?: string;
   label: string;
 }> = [
-  { value: 80.13, decimals: 2, suffix: "%", label: "Weighted Academic Average" },
   { value: 10, suffix: "%", prefix: "Top ", label: "Of Cohort, Rhodes University" },
   { value: 2, suffix: "nd", label: "Nationally — FNB DataQuest 2026" },
   { value: 30, suffix: "%", prefix: "+", label: "Avg. Grade Boost as Maths Tutor" },
@@ -159,6 +154,27 @@ const PILLARS = [
     numeral: "III",
     title: "Integrity",
     body: "A name built on service, accountability and integrity was entrusted to this residence by Chris Hani's own family. That legacy is honoured through action, not slogans.",
+  },
+];
+
+const AFFILIATIONS = [
+  {
+    name: "Rhodes University Rifle Club",
+    role: "Treasurer & Vice Chair",
+    description: "Managing real budgets and leading the team. Already delivering results.",
+    icon: "🎯",
+  },
+  {
+    name: "Nine Tenths Matric Mentoring",
+    role: "Mathematics Tutor",
+    description: "Lifting grades by an average of 30%. Service in action.",
+    icon: "📚",
+  },
+  {
+    name: "ABSA Youth Programme",
+    role: "Junior Systems Administrator",
+    description: "Professional experience with compliance and documentation.",
+    icon: "🏦",
   },
 ];
 
@@ -454,7 +470,6 @@ function CampaignPage() {
             <div className="animate-stamp absolute -left-3 -top-3 z-10 border-4 border-primary bg-background px-4 py-2">
               <span className="headline text-2xl text-primary">Vote</span>
             </div>
-            {/* ✅ FIX: Improved image loading with fallback */}
             {!imgLoaded && (
               <div className="flex h-[400px] w-full items-center justify-center border-2 border-foreground bg-muted">
                 <span className="kicker text-sm text-muted-foreground">
@@ -472,7 +487,7 @@ function CampaignPage() {
               onLoad={() => setImgLoaded(true)}
               onError={() => {
                 console.error("Failed to load poster image");
-                setImgLoaded(true); // Show placeholder instead of broken image
+                setImgLoaded(true);
               }}
             />
           </Reveal>
@@ -483,7 +498,7 @@ function CampaignPage() {
 
       {/* Stats */}
       <section className="border-b-2 border-foreground bg-secondary text-secondary-foreground">
-        <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x-2 divide-secondary-foreground/20 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 divide-x-2 divide-secondary-foreground/20 lg:grid-cols-4">
           {STATS.map((s, i) => (
             <div key={i} className="halftone-red px-6 py-10 text-center">
               <div className="headline text-4xl text-primary-foreground sm:text-5xl">
@@ -521,6 +536,31 @@ function CampaignPage() {
                     {p.body}
                   </p>
                 </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Affiliations */}
+      <section className="border-b-2 border-foreground">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-8">
+          <Reveal>
+            <p className="kicker text-sm text-primary">Committees</p>
+            <h2 className="headline mt-2 text-5xl sm:text-7xl">
+              Already <span className="text-primary">Trusted.</span>
+              <span className="block">Already Delivering.</span>
+            </h2>
+          </Reveal>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {AFFILIATIONS.map((a, i) => (
+              <Reveal key={a.name} delay={i * 120}>
+                <div className="border-2 border-foreground bg-card p-8 transition-all duration-200 hover:-translate-y-1 hover:shadow-[8px_8px_0_0_var(--color-primary)]">
+                  <span className="text-4xl">{a.icon}</span>
+                  <h3 className="headline mt-4 text-2xl">{a.name}</h3>
+                  <p className="kicker text-sm text-primary">{a.role}</p>
+                  <p className="mt-3 text-muted-foreground">{a.description}</p>
+                </div>
               </Reveal>
             ))}
           </div>
