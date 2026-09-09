@@ -6,11 +6,16 @@ import {
   useRouter,
   HeadContent,
   Scripts,
+  redirect,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+
+// Campaign officially ends 00:30 SAST, tonight (2026-09-10).
+// After this instant, every route redirects to /campaign-ended.
+const CAMPAIGN_END = new Date("2026-09-10T00:30:00+02:00");
 
 function NotFoundComponent() {
   return (
@@ -73,6 +78,12 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  beforeLoad: ({ location }) => {
+    const isOver = Date.now() >= CAMPAIGN_END.getTime();
+    if (isOver && location.pathname !== "/campaign-ended") {
+      throw redirect({ to: "/campaign-ended" });
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -101,7 +112,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600;700&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;600&family=Bebas+Neue&family=Inter:wght@400;500;600&family=Space+Mono&display=swap",
       },
       {
         rel: "stylesheet",
